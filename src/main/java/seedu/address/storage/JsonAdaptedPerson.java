@@ -15,6 +15,8 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.insurance.InsurancePlan;
+import seedu.address.model.person.insurance.InsurancePlanFactory;
 import seedu.address.model.person.insurance.InsurancePlansManager;
 import seedu.address.model.tag.Tag;
 
@@ -74,6 +76,16 @@ class JsonAdaptedPerson {
             personTags.add(tag.toModelType());
         }
 
+        final InsurancePlansManager insurancePlansManager = new InsurancePlansManager();
+        List<String> listOfPlansOwned = List.of(insurancePlans.split(","));
+
+        if (!listOfPlansOwned.get(0).equals("None")) {
+            for (String insurancePlanString : listOfPlansOwned) {
+                InsurancePlan insurancePlan = InsurancePlanFactory.createInsurancePlan(insurancePlanString);
+                insurancePlansManager.addPlan(insurancePlan);
+            }
+        }
+
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
@@ -110,10 +122,9 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     InsurancePlansManager.class.getSimpleName()));
         }
-        final InsurancePlansManager modelInsurancePlansManager = new InsurancePlansManager();
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelInsurancePlansManager, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, insurancePlansManager, modelTags);
     }
 
 }

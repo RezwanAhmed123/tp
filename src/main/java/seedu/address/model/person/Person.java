@@ -118,6 +118,7 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("insurancePlans", insurancePlansManager.toString())
                 .add("tags", tags)
                 .toString();
     }

@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INSURANCE_ID;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 
@@ -63,6 +64,13 @@ public class AddInsuranceCommand extends Command {
             personToEditInsurancePlansManager.checkIfPlanNotOwned(planToBeAdded);
 
             personToEditInsurancePlansManager.addPlan(planToBeAdded);
+
+            Person editedPerson = new Person(
+                    personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(),
+                    personToEdit.getAddress(), personToEditInsurancePlansManager, personToEdit.getTags());
+
+            model.setPerson(personToEdit, editedPerson);
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
             return new CommandResult(String.format(MESSAGE_ADD_INSURANCE_PLAN_SUCCESS,
                     personToEditInsurancePlansManager, Messages.format(personToEdit)));
